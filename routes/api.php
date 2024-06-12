@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AdminAuthController;
+use App\Http\Controllers\Api\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -27,4 +28,12 @@ Route::controller(AdminAuthController::class)->prefix("admin")->group(function (
     Route::post('logout', 'logout')->middleware('auth:admin');
     Route::post('refresh', 'refresh')->middleware('auth:admin');
     Route::get('me', 'me')->middleware('auth:admin');
+});
+
+Route::controller(CategoryController::class)->prefix('category')->middleware("auth:admin")->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{category}', 'show');
+    Route::post('/', 'store');
+    Route::put('/{category}', 'update');
+    Route::delete('/{category}', 'destroy');
 });
