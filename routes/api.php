@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AdminAuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -36,4 +37,14 @@ Route::controller(CategoryController::class)->prefix('category')->middleware("au
     Route::post('/', 'store');
     Route::put('/{category}', 'update');
     Route::delete('/{category}', 'destroy');
+});
+
+
+Route::controller(ProductController::class)->prefix('product')->middleware("auth:admin")->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{product}', 'show');
+    Route::post('/', 'store');
+    Route::put('/{product}', 'update');
+    Route::put('/{product}/image', 'updateProductImage');
+    Route::delete('/{product}', 'destroy');
 });

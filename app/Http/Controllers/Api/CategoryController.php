@@ -6,6 +6,7 @@ use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
+use App\Traits\CanLoadRelationships;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 
@@ -13,16 +14,19 @@ class CategoryController extends Controller
 {
 
     use HttpResponses;
+    use CanLoadRelationships;
+    private array $relations = ['products'];
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categories = CategoryResource::collection(Category::all());
-        return $this->success($categories, 'Categories retrieved', 200);
-    }
+        $query = $this->loadRelationships(Category::query());
+        $categories = CategoryResource::collection($query->paginate());
+        return $this->success($categories, 'Categories retrieved', 200, true);
 
+    }
 
 
     /**
